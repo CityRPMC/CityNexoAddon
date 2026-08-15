@@ -80,6 +80,26 @@ Mechanics:
 
 Do not add Nexo's regular `harvesting` mechanic to the same item unless it should also harvest vanilla crops.
 
+### WeaponMechanics repairs
+
+WeaponMechanics 4.x can store custom durability on each gun. A Nexo repair item can target those guns by their WeaponMechanics title, including `*` and `?` wildcards:
+
+```yaml
+gun_repair_kit:
+  material: PAPER
+  Mechanics:
+    repair:
+      fixed_amount: 250
+      weaponmechanics:
+        whitelist:
+          - "AR_*"
+          - "SMG_*"
+        blacklist:
+          - "*_Prototype"
+```
+
+Use `"*"` to repair every WeaponMechanics weapon. The WeaponMechanics weapon itself must configure `Info.Weapon_Item.Durability.Max_Damage`; `Shoot.Durability_Per_Shot` controls wear. Generic material/Nexo allowlists and the WeaponMechanics allowlist are additive, while all blacklists take precedence.
+
 ---
 ### 👥 Contributors
 <a href="https://github.com/Naimadx123/NexoAddon/graphs/contributors">

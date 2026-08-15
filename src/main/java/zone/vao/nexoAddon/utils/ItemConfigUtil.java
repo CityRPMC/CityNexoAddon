@@ -133,6 +133,8 @@ public class ItemConfigUtil {
       List<String> nexoIds = new ArrayList<>();
       List<Material> materialsBlacklist = new ArrayList<>();
       List<String> nexoIdsBlacklist = new ArrayList<>();
+      List<String> weaponMechanicsTitles = section.getStringList("Mechanics.repair.weaponmechanics.whitelist");
+      List<String> weaponMechanicsTitlesBlacklist = section.getStringList("Mechanics.repair.weaponmechanics.blacklist");
       if(!rawItems.isEmpty()){
         for (String rawItem : rawItems) {
           if(Material.matchMaterial(rawItem) != null) {
@@ -156,7 +158,8 @@ public class ItemConfigUtil {
         }
       }
 
-      mechanic.setRepair(ratio, fixedAmount, materials, nexoIds, materialsBlacklist, nexoIdsBlacklist);
+      mechanic.setRepair(ratio, fixedAmount, materials, nexoIds, materialsBlacklist,
+          nexoIdsBlacklist, weaponMechanicsTitles, weaponMechanicsTitlesBlacklist);
     }
   }
 

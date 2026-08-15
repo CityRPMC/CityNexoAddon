@@ -2,18 +2,24 @@ package zone.vao.nexoAddon.items.mechanics;
 
 import com.nexomc.nexo.api.NexoItems;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.persistence.PersistentDataType;
 import zone.vao.nexoAddon.NexoAddon;
 import zone.vao.nexoAddon.items.Mechanics;
 
 import java.util.List;
 
-public record Repair(double ratio, int fixedAmount, List<Material> materials, List<String> nexoIds, List<Material> materialsBlacklist, List<String> nexoIdsBlacklist) {
+public record Repair(double ratio, int fixedAmount, List<Material> materials, List<String> nexoIds,
+                     List<Material> materialsBlacklist, List<String> nexoIdsBlacklist,
+                     List<String> weaponMechanicsTitles, List<String> weaponMechanicsTitlesBlacklist) {
+
+  private static final NamespacedKey WEAPON_TITLE_KEY = new NamespacedKey("weaponmechanics", "weapon-title");
 
   public static class RepairListener implements Listener {
 
@@ -131,28 +137,73 @@ public record Repair(double ratio, int fixedAmount, List<Material> materials, Li
       if (item == null || item.getType() == Material.AIR) {
         return false;
       }
-      boolean whitelistDefined = !repair.materials().isEmpty() || !repair.nexoIds().isEmpty();
-      boolean blacklistDefined = !repair.materialsBlacklist().isEmpty() || !repair.nexoIdsBlacklist().isEmpty();
+      String nexoId = NexoItems.idFromItem(item);
+      String weaponTitle = getWeaponMechanicsTitle(item);
+      boolean whitelistDefined = !repair.materials().isEmpty() || !repair.nexoIds().isEmpty()
+          || !repair.weaponMechanicsTitles().isEmpty();
+      boolean blacklistDefined = !repair.materialsBlacklist().isEmpty() || !repair.nexoIdsBlacklist().isEmpty()
+          || !repair.weaponMechanicsTitlesBlacklist().isEmpty();
       if (blacklistDefined) {
         if (repair.materialsBlacklist().contains(item.getType())) {
           return false;
         }
-        String itemId = NexoItems.idFromItem(item);
-        if (itemId != null && repair.nexoIdsBlacklist().contains(itemId)) {
+        if (nexoId != null && repair.nexoIdsBlacklist().contains(nexoId)) {
+          return false;
+        }
+        if (weaponTitle != null && matchesAnyWeaponTitle(weaponTitle, repair.weaponMechanicsTitlesBlacklist())) {
           return false;
         }
       }
       if (whitelistDefined) {
         boolean whitelisted = repair.materials().contains(item.getType());
-        if (!whitelisted) {
-          String itemId = NexoItems.idFromItem(item);
-          whitelisted = itemId != null && repair.nexoIds().contains(itemId);
-        }
+        if (!whitelisted && nexoId != null) whitelisted = repair.nexoIds().contains(nexoId);
+        if (!whitelisted && weaponTitle != null)
+          whitelisted = matchesAnyWeaponTitle(weaponTitle, repair.weaponMechanicsTitles());
         if (!whitelisted) {
           return false;
         }
       }
       return true;
+    }
+
+    private static String getWeaponMechanicsTitle(ItemStack item) {
+      return item.getItemMeta().getPersistentDataContainer()
+          .get(WEAPON_TITLE_KEY, PersistentDataType.STRING);
+    }
+
+    private static boolean matchesAnyWeaponTitle(String weaponTitle, List<String> patterns) {
+      for (String pattern : patterns) {
+        if (matchesWeaponTitle(weaponTitle, pattern)) return true;
+      }
+      return false;
+    }
+
+    /** Supports exact titles as well as '*' and '?' wildcards, case-insensitively. */
+    private static boolean matchesWeaponTitle(String weaponTitle, String pattern) {
+      int titleIndex = 0;
+      int patternIndex = 0;
+      int starIndex = -1;
+      int matchAfterStar = -1;
+
+      while (titleIndex < weaponTitle.length()) {
+        if (patternIndex < pattern.length()
+            && (pattern.charAt(patternIndex) == '?'
+                || Character.toLowerCase(pattern.charAt(patternIndex)) == Character.toLowerCase(weaponTitle.charAt(titleIndex)))) {
+          patternIndex++;
+          titleIndex++;
+        } else if (patternIndex < pattern.length() && pattern.charAt(patternIndex) == '*') {
+          starIndex = patternIndex++;
+          matchAfterStar = titleIndex;
+        } else if (starIndex != -1) {
+          patternIndex = starIndex + 1;
+          titleIndex = ++matchAfterStar;
+        } else {
+          return false;
+        }
+      }
+
+      while (patternIndex < pattern.length() && pattern.charAt(patternIndex) == '*') patternIndex++;
+      return patternIndex == pattern.length();
     }
   }
 }

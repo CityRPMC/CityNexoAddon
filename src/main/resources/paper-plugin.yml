@@ -11,6 +11,10 @@ dependencies:
       load: BEFORE
       required: true
       join-classpath: true
+    WeaponMechanics:
+      load: BEFORE
+      required: false
+      join-classpath: false
     LiteFarm:
       load: BEFORE
       required: false

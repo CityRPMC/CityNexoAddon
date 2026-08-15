@@ -88,17 +88,18 @@ WeaponMechanics 4.x can store custom durability on each gun. A Nexo repair item 
 gun_repair_kit:
   material: PAPER
   Mechanics:
-    repair:
+    weaponmechanics_repair:
       fixed_amount: 250
-      weaponmechanics:
-        whitelist:
-          - "AR_*"
-          - "SMG_*"
-        blacklist:
-          - "*_Prototype"
+      whitelist:
+        - "AR_*"
+        - "SMG_*"
+      blacklist:
+        - "*_Prototype"
 ```
 
-Use `"*"` to repair every WeaponMechanics weapon. The WeaponMechanics weapon itself must configure `Info.Weapon_Item.Durability.Max_Damage`; `Shoot.Durability_Per_Shot` controls wear. Generic material/Nexo allowlists and the WeaponMechanics allowlist are additive, while all blacklists take precedence.
+`weaponmechanics_repair` is a dedicated CityNexoAddon mechanic, parallel to mechanics such as `litefarm_harvesting`; it is not part of the generic `repair` mechanic. Use `"*"` to repair every WeaponMechanics weapon. The WeaponMechanics weapon itself must configure `Info.Weapon_Item.Durability.Max_Damage`; `Shoot.Durability_Per_Shot` controls wear, and blacklists take precedence over whitelists.
+
+Legacy guns are upgraded in place when players join, open inventories, pick up items, or interact with a weapon. The migration preserves the complete item and only adds the configured max durability and removes the legacy unbreakable flag. Run `/nexoaddon migratewmdurability` after installing or reloading the weapon configs to sweep every online player's inventory and ender chest immediately. Guns belonging to offline players migrate when they next join, while guns in containers migrate when that container is opened. Set `weaponmechanics.auto_migrate_durability: false` in `config.yml` to disable lazy migration.
 
 ---
 ### 👥 Contributors

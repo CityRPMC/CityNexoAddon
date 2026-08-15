@@ -11,6 +11,9 @@ enable_totem_delay: false                   # Adds a 2 tick delay before the tot
 
 update_checker: true
 
+weaponmechanics:
+  auto_migrate_durability: true              # Upgrade legacy guns as players encounter them
+
 messages:
   bigmining:
     enabled: <green>Bigmining on

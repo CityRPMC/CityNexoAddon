@@ -96,6 +96,7 @@ public class ItemConfigUtil {
                 .computeIfAbsent(itemId, Mechanics::new);
 
         loadRepairMechanic(itemSection, mechanic);
+        loadWeaponMechanicsRepairMechanic(itemSection, mechanic);
         loadBigMiningMechanic(itemSection, mechanic);
         loadVeinMinerMechanic(itemSection, mechanic);
         loadBedrockBreakMechanic(itemSection, mechanic);
@@ -133,8 +134,6 @@ public class ItemConfigUtil {
       List<String> nexoIds = new ArrayList<>();
       List<Material> materialsBlacklist = new ArrayList<>();
       List<String> nexoIdsBlacklist = new ArrayList<>();
-      List<String> weaponMechanicsTitles = section.getStringList("Mechanics.repair.weaponmechanics.whitelist");
-      List<String> weaponMechanicsTitlesBlacklist = section.getStringList("Mechanics.repair.weaponmechanics.blacklist");
       if(!rawItems.isEmpty()){
         for (String rawItem : rawItems) {
           if(Material.matchMaterial(rawItem) != null) {
@@ -158,9 +157,19 @@ public class ItemConfigUtil {
         }
       }
 
-      mechanic.setRepair(ratio, fixedAmount, materials, nexoIds, materialsBlacklist,
-          nexoIdsBlacklist, weaponMechanicsTitles, weaponMechanicsTitlesBlacklist);
+      mechanic.setRepair(ratio, fixedAmount, materials, nexoIds, materialsBlacklist, nexoIdsBlacklist);
     }
+  }
+
+  private static void loadWeaponMechanicsRepairMechanic(ConfigurationSection section, Mechanics mechanic) {
+    String path = "Mechanics.weaponmechanics_repair";
+    if (!section.contains(path + ".ratio") && !section.contains(path + ".fixed_amount")) return;
+
+    mechanic.setWeaponMechanicsRepair(
+        section.getDouble(path + ".ratio"),
+        section.getInt(path + ".fixed_amount"),
+        section.getStringList(path + ".whitelist"),
+        section.getStringList(path + ".blacklist"));
   }
 
   private static void loadBigMiningMechanic(ConfigurationSection section, Mechanics mechanic) {

@@ -33,6 +33,7 @@ import zone.vao.nexoAddon.events.nexo.furnitures.NexoFurnitureBreakListener;
 import zone.vao.nexoAddon.events.nexo.furnitures.NexoFurnitureInteractListener;
 import zone.vao.nexoAddon.events.player.PlayerMovementListener;
 import zone.vao.nexoAddon.events.player.TotemSound;
+import zone.vao.nexoAddon.events.weaponmechanics.WeaponMechanicsDurabilityMigrator;
 import zone.vao.nexoAddon.items.Components;
 import zone.vao.nexoAddon.items.Mechanics;
 import zone.vao.nexoAddon.populators.CustomChunkGenerator;
@@ -75,6 +76,7 @@ public final class NexoAddon extends JavaPlugin {
   private boolean packeteventsLoaded = false;
   private boolean mythicMobsLoaded = false;
   private ParticleEffectManager particleEffectManager;
+  private WeaponMechanicsDurabilityMigrator weaponMechanicsDurabilityMigrator;
   private final Map<Location, WrappedTask> particleTasks = new HashMap<>();
   @Setter
   private Boolean isDecay = false;
@@ -222,6 +224,8 @@ public final class NexoAddon extends JavaPlugin {
     registerEvent(new WorldLoadListener());
     registerEvent(new NexoPackUploadListener());
     registerEvent(new TotemSound());
+    weaponMechanicsDurabilityMigrator = new WeaponMechanicsDurabilityMigrator(this);
+    registerEvent(weaponMechanicsDurabilityMigrator);
 
     Mechanics.registerListeners(this);
     Components.registerListeners(this);

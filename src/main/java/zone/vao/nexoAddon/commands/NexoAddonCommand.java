@@ -22,7 +22,17 @@ public class NexoAddonCommand extends BaseCommand {
   @Subcommand("reload")
   public void onReload(CommandSender sender) {
     NexoAddon.getInstance().reload();
+    NexoAddon.getInstance().getWeaponMechanicsDurabilityMigrator().reloadWeaponDurability();
     sender.sendMessage("Reloaded " + NexoAddon.getInstance().getName());
+  }
+
+  @Subcommand("migratewmdurability")
+  public void onMigrateWeaponMechanicsDurability(CommandSender sender) {
+    int configured = NexoAddon.getInstance().getWeaponMechanicsDurabilityMigrator().reloadWeaponDurability();
+    int migrated = NexoAddon.getInstance().getWeaponMechanicsDurabilityMigrator().migrateOnlinePlayers();
+    sender.sendMessage(MiniMessage.miniMessage().deserialize(
+        "<green>Migrated <white>" + migrated + "</white> WeaponMechanics guns using <white>"
+            + configured + "</white> configured durability values.</green>"));
   }
 
   @Subcommand("repopulate")

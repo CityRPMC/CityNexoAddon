@@ -19,6 +19,7 @@ public class Mechanics {
 
   private final String id;
   private Repair repair;
+  private WeaponMechanicsRepair weaponMechanicsRepair;
   private BigMining bigMining;
   private VeinMiner veinMiner;
   private BedrockBreak bedrockBreak;
@@ -47,11 +48,12 @@ public class Mechanics {
     this.id = id;
   }
 
-  public void setRepair(double ration, int fixedAmount, List<Material> materials, List<String> nexoIds,
-      List<Material> materialsBlacklist, List<String> nexoIdsBlacklist,
-      List<String> weaponMechanicsTitles, List<String> weaponMechanicsTitlesBlacklist) {
-    this.repair = new Repair(ration, fixedAmount, materials, nexoIds, materialsBlacklist,
-        nexoIdsBlacklist, weaponMechanicsTitles, weaponMechanicsTitlesBlacklist);
+  public void setRepair(double ration, int fixedAmount, List<Material> materials, List<String> nexoIds, List<Material> materialsBlacklist, List<String> nexoIdsBlacklist) {
+    this.repair = new Repair(ration, fixedAmount, materials, nexoIds, materialsBlacklist, nexoIdsBlacklist);
+  }
+
+  public void setWeaponMechanicsRepair(double ratio, int fixedAmount, List<String> whitelist, List<String> blacklist) {
+    this.weaponMechanicsRepair = new WeaponMechanicsRepair(ratio, fixedAmount, whitelist, blacklist);
   }
 
   public void setBigMining(int radius, int depth, boolean switchable, List<Material> materials, Sound sound) {
@@ -165,6 +167,7 @@ public class Mechanics {
 
     registerListener(new Remember.RememberListener(), plugin);
     registerListener(new Repair.RepairListener(), plugin);
+    registerListener(new WeaponMechanicsRepair.WeaponMechanicsRepairListener(), plugin);
 
     registerListener(new ShiftBlock.ShiftBlockListener(), plugin);
     registerListener(new SpawnerBreak.SpawnerBreakListener(), plugin);

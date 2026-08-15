@@ -65,6 +65,21 @@ Available on [Polymart/voxel.shop](<https://voxel.shop/product/6950/nexoaddon>),
 
 🔗 Expand your Nexo-powered server with deep custom interactions using **NexoAddon**.
 
+### LiteFarm harvesting
+
+The CityRP fork can harvest mature LiteFarm crops with a separate item mechanic. LiteFarm still handles crop permissions, rewards, events, and its global replant setting.
+
+```yaml
+Mechanics:
+  litefarm_harvesting:
+    cooldown: 10 # seconds
+    radius: 5
+    height: 3
+    lower_item_durability: true
+```
+
+Do not add Nexo's regular `harvesting` mechanic to the same item unless it should also harvest vanilla crops.
+
 ---
 ### 👥 Contributors
 <a href="https://github.com/Naimadx123/NexoAddon/graphs/contributors">

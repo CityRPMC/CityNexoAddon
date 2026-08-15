@@ -118,6 +118,7 @@ public class ItemConfigUtil {
         loadUniqueIdMechanic(itemSection, mechanic);
         loadInventoryType(itemSection, mechanic);
         loadLifesteal(itemSection, mechanic);
+        loadLiteFarmHarvesting(itemSection, mechanic);
       });
     }
   }
@@ -487,6 +488,16 @@ public class ItemConfigUtil {
     if (!section.contains("Mechanics.lifesteal")) return;
 
     mechanic.setLifesteal(section.getInt("Mechanics.lifesteal.amount", 1), section.getDouble("Mechanics.lifesteal.cooldown", 0.0));
+  }
+
+  private static void loadLiteFarmHarvesting(ConfigurationSection section, Mechanics mechanic) {
+    if (!section.contains("Mechanics.litefarm_harvesting")) return;
+
+    int radius = Math.max(1, section.getInt("Mechanics.litefarm_harvesting.radius", 1));
+    int height = Math.max(1, section.getInt("Mechanics.litefarm_harvesting.height", 1));
+    double cooldown = Math.max(0.0, section.getDouble("Mechanics.litefarm_harvesting.cooldown", 0.0));
+    boolean lowerItemDurability = section.getBoolean("Mechanics.litefarm_harvesting.lower_item_durability", true);
+    mechanic.setLiteFarmHarvesting(radius, height, cooldown, lowerItemDurability);
   }
 
   private static void parseItemList(List<String> rawItems, List<Material> materials, List<String> nexoIds) {

@@ -41,6 +41,7 @@ public class Mechanics {
   private UniqueId uniqueId;
   private InventoryType inventoryType;
   private Lifesteal lifesteal;
+  private LiteFarmHarvesting liteFarmHarvesting;
 
   public Mechanics(String id) {
     this.id = id;
@@ -130,6 +131,10 @@ public class Mechanics {
     this.lifesteal = new Lifesteal(amount, cooldown);
   }
 
+  public void setLiteFarmHarvesting(int radius, int height, double cooldown, boolean lowerItemDurability) {
+    this.liteFarmHarvesting = new LiteFarmHarvesting(radius, height, cooldown, lowerItemDurability);
+  }
+
   public static void registerListeners(NexoAddon plugin){
 
     registerListener(new AutoCatch.AutoCatchListener(), plugin);
@@ -149,6 +154,7 @@ public class Mechanics {
     registerListener(new KillMessage.KillMessageListener(), plugin);
 
     registerListener(new Lifesteal.LifestealListener(), plugin);
+    registerListener(new LiteFarmHarvesting.LiteFarmHarvestingListener(), plugin);
 
     registerListener(new MiningTools.MiningToolsListener(), plugin);
 

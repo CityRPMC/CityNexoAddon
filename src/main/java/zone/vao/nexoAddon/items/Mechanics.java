@@ -43,6 +43,7 @@ public class Mechanics {
   private InventoryType inventoryType;
   private Lifesteal lifesteal;
   private LiteFarmHarvesting liteFarmHarvesting;
+  private LiteFishSeafood liteFishSeafood;
 
   public Mechanics(String id) {
     this.id = id;
@@ -138,6 +139,12 @@ public class Mechanics {
 
   public void setLiteFarmHarvesting(int radius, int height, double cooldown, boolean lowerItemDurability) {
     this.liteFarmHarvesting = new LiteFarmHarvesting(radius, height, cooldown, lowerItemDurability);
+  }
+
+  public void setLiteFishSeafood(String name, double durationSeconds, double bonusCatchChance,
+                                 int gameSpeed, int gameSize, int playerHealth, int dropHealth) {
+    this.liteFishSeafood = new LiteFishSeafood(
+        name, durationSeconds, bonusCatchChance, gameSpeed, gameSize, playerHealth, dropHealth);
   }
 
   public static void registerListeners(NexoAddon plugin){

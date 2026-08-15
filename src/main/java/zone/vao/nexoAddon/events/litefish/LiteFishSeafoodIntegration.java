@@ -15,6 +15,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.EventExecutor;
 import org.bukkit.plugin.Plugin;
 import zone.vao.nexoAddon.NexoAddon;
+import zone.vao.nexoAddon.items.Mechanics;
+import zone.vao.nexoAddon.items.mechanics.LiteFishSeafood;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -97,7 +99,7 @@ public final class LiteFishSeafoodIntegration implements Listener {
     String itemId = NexoItems.idFromItem(event.getItem());
     if (itemId == null) return;
 
-    SeafoodBuff buff = loadBuff(itemId);
+    LiteFishSeafood buff = loadBuff(itemId);
     if (buff == null || buff.durationSeconds() <= 0) return;
 
     long expiresAt = System.currentTimeMillis() + Math.round(buff.durationSeconds() * 1000.0);
@@ -119,7 +121,7 @@ public final class LiteFishSeafoodIntegration implements Listener {
       Object modificator = getModificator.invoke(event);
       if (modificator == null) return;
 
-      SeafoodBuff buff = active.buff();
+      LiteFishSeafood buff = active.buff();
       addIntField(modificator, "speed_inc", buff.gameSpeed());
       addIntField(modificator, "size_inc", buff.gameSize());
       addIntField(modificator, "player_health", buff.playerHealth());
@@ -166,11 +168,16 @@ public final class LiteFishSeafoodIntegration implements Listener {
     return null;
   }
 
-  private SeafoodBuff loadBuff(String itemId) {
+  private LiteFishSeafood loadBuff(String itemId) {
+    Mechanics mechanics = plugin.getMechanics().get(itemId);
+    if (mechanics != null && mechanics.getLiteFishSeafood() != null) {
+      return mechanics.getLiteFishSeafood();
+    }
+
     ConfigurationSection section = plugin.getConfig().getConfigurationSection(CONFIG_PATH + "." + itemId);
     if (section == null) return null;
 
-    return new SeafoodBuff(
+    return new LiteFishSeafood(
         section.getString("name", itemId),
         Math.max(0.0, section.getDouble("duration_seconds", 300.0)),
         Math.clamp(section.getDouble("bonus_catch_chance", 0.0), 0.0, 1.0),
@@ -186,7 +193,7 @@ public final class LiteFishSeafoodIntegration implements Listener {
     field.setInt(target, field.getInt(target) + amount);
   }
 
-  private void sendConfiguredMessage(Player player, String path, SeafoodBuff buff) {
+  private void sendConfiguredMessage(Player player, String path, LiteFishSeafood buff) {
     String message = plugin.getConfig().getString(path, "");
     if (message == null || message.isBlank()) return;
 
@@ -208,14 +215,5 @@ public final class LiteFishSeafoodIntegration implements Listener {
         "LiteFish seafood integration is incompatible with this LiteFish version: " + exception.getMessage());
   }
 
-  private record SeafoodBuff(
-      String name,
-      double durationSeconds,
-      double bonusCatchChance,
-      int gameSpeed,
-      int gameSize,
-      int playerHealth,
-      int dropHealth) {}
-
-  private record ActiveBuff(SeafoodBuff buff, long expiresAt) {}
+  private record ActiveBuff(LiteFishSeafood buff, long expiresAt) {}
 }

@@ -88,7 +88,22 @@ The CityRP chef foods integrate with LiteFish without requiring changes to their
 * `tmls_tuna_salad_sandwich` — Bountiful Catch gives a 10% chance to duplicate a successful catch for five minutes.
 * `tmls_fish_stew` — Captain's Feast combines the easier minigame with a 15% bonus-catch chance for five minutes.
 
-The item IDs, durations, minigame modifiers, chances, and action-bar messages are configurable under `litefish_seafood` in `config.yml`. Chances use decimal values from `0.0` to `1.0`. LiteFish is optional; CityNexoAddon continues loading when it is absent.
+The item IDs, durations, minigame modifiers, chances, and action-bar messages have defaults under `litefish_seafood` in `config.yml`. A Nexo item can override its default—or define a new seafood food—with an item-level mechanic:
+
+```yaml
+Mechanics:
+  litefish_seafood:
+    name: "Bountiful Catch"
+    duration_seconds: 300
+    bonus_catch_chance: 0.10
+    minigame:
+      speed: 0
+      size: 0
+      player_health: 0
+      drop_health: 0
+```
+
+Eating a different seafood food replaces the active buff. Chances use decimal values from `0.0` to `1.0`. LiteFish is optional; CityNexoAddon continues loading when it is absent.
 
 ### WeaponMechanics repairs
 

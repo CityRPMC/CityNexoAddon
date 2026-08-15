@@ -120,6 +120,7 @@ public class ItemConfigUtil {
         loadInventoryType(itemSection, mechanic);
         loadLifesteal(itemSection, mechanic);
         loadLiteFarmHarvesting(itemSection, mechanic);
+        loadLiteFishSeafood(itemSection, mechanic);
       });
     }
   }
@@ -510,6 +511,20 @@ public class ItemConfigUtil {
     double cooldown = Math.max(0.0, section.getDouble("Mechanics.litefarm_harvesting.cooldown", 0.0));
     boolean lowerItemDurability = section.getBoolean("Mechanics.litefarm_harvesting.lower_item_durability", true);
     mechanic.setLiteFarmHarvesting(radius, height, cooldown, lowerItemDurability);
+  }
+
+  private static void loadLiteFishSeafood(ConfigurationSection section, Mechanics mechanic) {
+    String path = "Mechanics.litefish_seafood";
+    if (!section.contains(path)) return;
+
+    mechanic.setLiteFishSeafood(
+        section.getString(path + ".name", mechanic.getId()),
+        Math.max(0.0, section.getDouble(path + ".duration_seconds", 300.0)),
+        Math.clamp(section.getDouble(path + ".bonus_catch_chance", 0.0), 0.0, 1.0),
+        section.getInt(path + ".minigame.speed", 0),
+        section.getInt(path + ".minigame.size", 0),
+        section.getInt(path + ".minigame.player_health", 0),
+        section.getInt(path + ".minigame.drop_health", 0));
   }
 
   private static void parseItemList(List<String> rawItems, List<Material> materials, List<String> nexoIds) {

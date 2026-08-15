@@ -27,6 +27,7 @@ import zone.vao.nexoAddon.events.PrepareRecipesListener;
 import zone.vao.nexoAddon.events.WorldLoadListener;
 import zone.vao.nexoAddon.events.blocks.BlockBreakListener;
 import zone.vao.nexoAddon.events.chunk.ChunkLoadListener;
+import zone.vao.nexoAddon.events.litefish.LiteFishSeafoodIntegration;
 import zone.vao.nexoAddon.events.nexo.NexoItemsLoadedListener;
 import zone.vao.nexoAddon.events.nexo.NexoPackUploadListener;
 import zone.vao.nexoAddon.events.nexo.furnitures.NexoFurnitureBreakListener;
@@ -77,6 +78,7 @@ public final class NexoAddon extends JavaPlugin {
   private boolean mythicMobsLoaded = false;
   private ParticleEffectManager particleEffectManager;
   private WeaponMechanicsDurabilityMigrator weaponMechanicsDurabilityMigrator;
+  private LiteFishSeafoodIntegration liteFishSeafoodIntegration;
   private final Map<Location, WrappedTask> particleTasks = new HashMap<>();
   @Setter
   private Boolean isDecay = false;
@@ -226,6 +228,9 @@ public final class NexoAddon extends JavaPlugin {
     registerEvent(new TotemSound());
     weaponMechanicsDurabilityMigrator = new WeaponMechanicsDurabilityMigrator(this);
     registerEvent(weaponMechanicsDurabilityMigrator);
+    liteFishSeafoodIntegration = new LiteFishSeafoodIntegration(this);
+    registerEvent(liteFishSeafoodIntegration);
+    liteFishSeafoodIntegration.registerLiteFishEvents();
 
     Mechanics.registerListeners(this);
     Components.registerListeners(this);

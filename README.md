@@ -80,6 +80,16 @@ Mechanics:
 
 Do not add Nexo's regular `harvesting` mechanic to the same item unless it should also harvest vanilla crops.
 
+### LiteFish seafood buffs
+
+The CityRP chef foods integrate with LiteFish without requiring changes to their Nexo item files. Eating one seafood food replaces the player's current seafood buff:
+
+* `tmls_fish_sandwich` — Angler's Focus makes the fishing minigame easier for five minutes.
+* `tmls_tuna_salad_sandwich` — Bountiful Catch gives a 10% chance to duplicate a successful catch for five minutes.
+* `tmls_fish_stew` — Captain's Feast combines the easier minigame with a 15% bonus-catch chance for five minutes.
+
+The item IDs, durations, minigame modifiers, chances, and action-bar messages are configurable under `litefish_seafood` in `config.yml`. Chances use decimal values from `0.0` to `1.0`. LiteFish is optional; CityNexoAddon continues loading when it is absent.
+
 ### WeaponMechanics repairs
 
 WeaponMechanics 4.x can store custom durability on each gun. A Nexo repair item can target those guns by their WeaponMechanics title, including `*` and `?` wildcards:

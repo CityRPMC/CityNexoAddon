@@ -14,6 +14,37 @@ update_checker: true
 weaponmechanics:
   auto_migrate_durability: true              # Upgrade legacy guns as players encounter them
 
+litefish_seafood:
+  enabled: true
+  foods:
+    tmls_fish_sandwich:
+      name: "Angler's Focus"
+      duration_seconds: 300
+      bonus_catch_chance: 0.0
+      minigame:
+        speed: -1
+        size: 1
+        player_health: 1
+        drop_health: -1
+    tmls_tuna_salad_sandwich:
+      name: "Bountiful Catch"
+      duration_seconds: 300
+      bonus_catch_chance: 0.10
+      minigame:
+        speed: 0
+        size: 0
+        player_health: 0
+        drop_health: 0
+    tmls_fish_stew:
+      name: "Captain's Feast"
+      duration_seconds: 300
+      bonus_catch_chance: 0.15
+      minigame:
+        speed: -1
+        size: 1
+        player_health: 1
+        drop_health: -1
+
 messages:
   bigmining:
     enabled: <green>Bigmining on
@@ -26,5 +57,8 @@ messages:
   autocatch:
     enabled: "<gray>AutoCatch is now <green>enabled<gray>."
     disabled: "<gray>AutoCatch is now <red>disabled<gray>."
+  seafood_buff:
+    activated: "<aqua>%buff% <gray>is active for <white>%duration%<gray>."
+    bonus_catch: "<aqua>%buff% <gray>produced a bonus catch!"
 
 debug: false

@@ -228,6 +228,9 @@ public final class NexoAddon extends JavaPlugin {
     registerEvent(new TotemSound());
     weaponMechanicsDurabilityMigrator = new WeaponMechanicsDurabilityMigrator(this);
     registerEvent(weaponMechanicsDurabilityMigrator);
+    if (Bukkit.getPluginManager().getPlugin("WeaponMechanics") != null) {
+      registerEvent(new zone.vao.nexoAddon.events.weaponmechanics.WeaponJammingListener(this));
+    }
     liteFishSeafoodIntegration = new LiteFishSeafoodIntegration(this);
     registerEvent(liteFishSeafoodIntegration);
     liteFishSeafoodIntegration.registerLiteFishEvents();
